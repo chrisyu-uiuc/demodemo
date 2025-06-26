@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSmart | User Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --disabled: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background-color: var(--disabled);
+            color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.loading {
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        @keyframes button-loading-spinner {
+            from {
+                transform: rotate(0turn);
+            }
+            to {
+                transform: rotate(1turn);
+            }
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background-color: rgba(67, 97, 238, 0.2);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background-color: rgba(76, 201, 240, 0.2);
+            color: #1a936f;
+        }
+
+        .badge-warning {
+            background-color: rgba(248, 150, 30, 0.2);
+            color: #f8961e;
+        }
+
+        .badge-danger {
+            background-color: rgba(247, 37, 133, 0.2);
+            color: #d00000;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: var(--light);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .performance-section {
+            margin-bottom: 2rem;
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .performance-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .performance-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .performance-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .performance-card-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .performance-card-value {
+            font-weight: 700;
+        }
+
+        .performance-card-details {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #6c757d;
+            display: none;
+        }
+
+        .performance-card.expanded .performance-card-details {
+            display: block;
+        }
+
+        .session-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .session-subject {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .session-accuracy {
+            font-weight: 700;
+        }
+
+        .session-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        .session-subtopics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .session-subtopic {
+            background-color: var(--light);
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+        }
+
+        .back-btn {
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LearnSmart Admin</div>
+            <div class="user-info">
+                <div class="avatar">A</div>
+                <span>Admin</span>
+            </div>
+        </div>
+
+        <button class="btn-outline back-btn" onclick="window.history.back()">← Back to Users</button>
+
+        <div class="card">
+            <h1 id="profileTitle">User Profile</h1>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="userId">-</div>
+                    <div class="stat-label">User ID</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="sessionsCount">0</div>
+                    <div class="stat-label">Sessions</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="questionsAttempted">0</div>
+                    <div class="stat-label">Questions Attempted</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="scoredRate">0%</div>
+                    <div class="stat-label">Scored Rate</div>
+                </div>
+
+
+            </div>
+
+            <div class="performance-section">
+                <h2>Subjects Attempted</h2>
+                <div class="performance-grid" id="subjectsContainer">
+                    <!-- Subjects will be loaded here -->
+                </div>
+            </div>
+
+            <div class="performance-section">
+                <div class="performance-grid" id="subtopicsContainer">
+                    <!-- Subtopics will be loaded here -->
+                </div>
+            </div>
+
+            <div class="performance-section">
+                <h2>Strengths & Weaknesses</h2>
+                <div class="performance-grid">
+                    <div class="performance-card">
+                        <div class="performance-card-header">
+                            <div class="performance-card-title">Top Strength</div>
+                            <div class="performance-card-value" id="topStrength">-</div>
+                        </div>
+                        <div class="performance-card-details" id="strengthDetails">
+                            <!-- Details will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="performance-card">
+                        <div class="performance-card-header">
+                            <div class="performance-card-title">Main Weakness</div>
+                            <div class="performance-card-value" id="mainWeakness">-</div>
+                        </div>
+                        <div class="performance-card-details" id="weaknessDetails">
+                            <!-- Details will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="performance-section">
+                <h2>Recent Sessions</h2>
+                <div id="sessionsContainer">
+                    <!-- Sessions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API base URL - make sure this matches your Flask server
+        const API_BASE_URL = 'http://localhost:5000';
+        
+        // Get user ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('user_id');
+        
+        // Load user profile when page loads
+        window.onload = function() {
+            if (!userId) {
+                alert('User ID parameter is required');
+                return;
+            }
+            
+            loadUserProfile(userId);
+        };
+        
+        async function loadUserProfile(userId) {
+            try {
+                // Show loading state
+                document.getElementById('profileTitle').textContent = `Loading profile for user ${userId}...`;
+                
+                // Call API to get user profile
+                const response = await fetch(`${API_BASE_URL}/api/user/profile?user_id=${userId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Check if the response contains an error
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update profile title
+                document.getElementById('profileTitle').textContent = `User Profile: ${userId}`;
+                
+                // Update basic stats
+                document.getElementById('userId').textContent = userId;
+                document.getElementById('sessionsCount').textContent = data.performance.total_sessions || 0;
+                document.getElementById('questionsAttempted').textContent = data.performance.correct_answers || 0;
+                document.getElementById('scoredRate').textContent = `${data.performance.overall_accuracy || 0}%`;
+                
+                
+                // Populate subjects
+                const subjectsContainer = document.getElementById('subjectsContainer');
+                subjectsContainer.innerHTML = '';
+                
+                if (data.performance.subject_performance && data.performance.subject_performance.length > 0) {
+                    data.performance.subject_performance.forEach(subject => {
+                        const subjectCard = document.createElement('div');
+                        subjectCard.className = 'performance-card';
+                        subjectCard.innerHTML = `
+                            <div class="performance-card-header">
+                                <div class="performance-card-title">${subject.subject}</div>
+                                <div class="performance-card-value">${subject.accuracy}%</div>
+                            </div>
+                            <div class="performance-card-details">
+                                <div>Attempts: ${subject.attempts}</div>
+                                <div>Correct: ${subject.correct}</div>
+                                <div>Avg Difficulty: ${subject.average_difficulty}</div>
+                                ${subject.strongest_subtopic ? `<div>Strongest: ${subject.strongest_subtopic.name} (${subject.strongest_subtopic.accuracy}%)</div>` : ''}
+                                ${subject.weakest_subtopic ? `<div>Weakest: ${subject.weakest_subtopic.name} (${subject.weakest_subtopic.accuracy}%)</div>` : ''}
+                            </div>
+                        `;
+                        
+                        // Add click event to expand/collapse
+                        subjectCard.addEventListener('click', function() {
+                            this.classList.toggle('expanded');
+                        });
+                        
+                        subjectsContainer.appendChild(subjectCard);
+                    });
+                } else {
+                    subjectsContainer.innerHTML = '<div>No subject data available</div>';
+                }
+                
+                // Populate key subtopics
+                const subtopicsContainer = document.getElementById('subtopicsContainer');
+                subtopicsContainer.innerHTML = '';
+                
+                if (data.performance.subject_performance && data.performance.subject_performance.length > 0) {
+                    // Get all subtopics from all subjects
+                    const allSubtopics = [];
+                    data.performance.subject_performance.forEach(subject => {
+                        if (subject.subtopics && subject.subtopics.length > 0) {
+                            allSubtopics.push(...subject.subtopics.map(st => ({
+                                ...st,
+                                subject: subject.subject
+                            })));
+                        }
+                    });
+                    
+                    // Sort by accuracy and take top 6
+                    allSubtopics.sort((a, b) => b.accuracy - a.accuracy);
+                    const topSubtopics = allSubtopics.slice(0, 6);
+                    
+                    if (topSubtopics.length > 0) {
+                        topSubtopics.forEach(subtopic => {
+                            const subtopicCard = document.createElement('div');
+                            subtopicCard.className = 'performance-card';
+                            subtopicCard.innerHTML = `
+                                <div class="performance-card-header">
+                                    <div class="performance-card-title">${subtopic.name}</div>
+                                    <div class="performance-card-value">${subtopic.accuracy}%</div>
+                                </div>
+                                <div class="performance-card-details">
+                                    <div>Subject: ${subtopic.subject}</div>
+                                    <div>Attempts: ${subtopic.attempts}</div>
+                                </div>
+                            `;
+                            
+                            // Add click event to expand/collapse
+                            subtopicCard.addEventListener('click', function() {
+                                this.classList.toggle('expanded');
+                            });
+                            
+                            subtopicsContainer.appendChild(subtopicCard);
+                        });
+                    } else {
+                        subtopicsContainer.innerHTML = '<div></div>';
+                    }
+                } else {
+                    subtopicsContainer.innerHTML = '<div>No subtopic data available</div>';
+                }
+                
+                // Populate strengths and weaknesses
+                if (data.performance.performance_summary) {
+                    const topStrength = data.performance.performance_summary.top_subjects[0];
+                    const mainWeakness = data.performance.performance_summary.weak_subjects[0];
+                    
+                    if (topStrength) {
+                        document.getElementById('topStrength').textContent = `${topStrength.subject} (${topStrength.accuracy}%)`;
+                        document.getElementById('strengthDetails').innerHTML = `
+                            <div>Accuracy: ${topStrength.accuracy}%</div>
+                            <div>Attempts: ${topStrength.attempts}</div>
+                            ${topStrength.strongest_subtopic ? `<div>Strongest Subtopic: ${topStrength.strongest_subtopic.name} (${topStrength.strongest_subtopic.accuracy}%)</div>` : ''}
+                        `;
+                    }
+                    
+                    if (mainWeakness) {
+                        document.getElementById('mainWeakness').textContent = `${mainWeakness.subject} (${mainWeakness.accuracy}%)`;
+                        document.getElementById('weaknessDetails').innerHTML = `
+                            <div>Accuracy: ${mainWeakness.accuracy}%</div>
+                            <div>Attempts: ${mainWeakness.attempts}</div>
+                            ${mainWeakness.weakest_subtopic ? `<div>Weakest Subtopic: ${mainWeakness.weakest_subtopic.name} (${mainWeakness.weakest_subtopic.accuracy}%)</div>` : ''}
+                        `;
+                    }
+                }
+                
+                // Populate recent sessions
+                const sessionsContainer = document.getElementById('sessionsContainer');
+                sessionsContainer.innerHTML = '';
+                
+                if (data.recent_sessions && data.recent_sessions.length > 0) {
+                    data.recent_sessions.forEach(session => {
+                        const sessionCard = document.createElement('div');
+                        sessionCard.className = 'session-card';
+                        sessionCard.innerHTML = `
+                            <div class="session-header">
+                                <div class="session-subject">${session.subject || 'Unknown'}</div>
+                                <div class="session-accuracy">${session.accuracy}%</div>
+                            </div>
+                            <div class="session-meta">
+                                <div>${new Date(session.timestamp).toLocaleString()}</div>
+                                <div>${session.total_questions} questions</div>
+                                <div>${session.correct_answers} correct</div>
+                            </div>
+                            <div class="session-subtopics">
+                                ${session.subtopics.map(subtopic => 
+                                    `<span class="session-subtopic">${subtopic}</span>`
+                                ).join('')}
+                            </div>
+                        `;
+                        sessionsContainer.appendChild(sessionCard);
+                    });
+                } else {
+                    sessionsContainer.innerHTML = '<div>No recent sessions available</div>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+                document.getElementById('profileTitle').textContent = 'Error loading profile';
+                alert('Failed to load user profile. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

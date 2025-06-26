@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSmart | Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --disabled: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 6
+00;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background-color: var(--disabled);
+            color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.loading {
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        @keyframes button-loading-spinner {
+            from {
+                transform: rotate(0turn);
+            }
+            to {
+                transform: rotate(1turn);
+            }
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background-color: rgba(67, 97, 238, 0.2);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background-color: rgba(76, 201, 240, 0.2);
+            color: #1a936f;
+        }
+
+        .badge-warning {
+            background-color: rgba(248, 150, 30, 0.2);
+            color: #f8961e;
+        }
+
+        .badge-danger {
+            background-color: rgba(247, 37, 133, 0.2);
+            color: #d00000;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .pagination button {
+            margin: 0 0.25rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: var(--light);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 0.75rem 2rem 0.75rem 1rem;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .clear-btn:hover {
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LearnSmart Admin</div>
+            <div class="user-info">
+                <div class="avatar">A</div>
+                <span>Admin</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h1>User Management</h1>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="sessionGenerated">0</div>
+                    <div class="stat-label">Sessions Generated</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="questionsGenerated">0</div>
+                    <div class="stat-label">Questions Generated</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="answersEvaluated">0</div>
+                    <div class="stat-label">Answers Evaluated</div>
+                </div>
+            </div>
+            
+	    <div class="search-container">
+ 		   <div class="search-input-wrapper">
+   		     <input type="text" id="searchInput" placeholder="Search users by ID, name, or email...">
+     	             <button id="clearSearchBtn" class="clear-btn" style="display: none;">×</button>
+    		   </div>
+    		<button class="btn" id="searchBtn">Search</button>
+            </div>
+            <div class="table-container">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Learning Style</th>
+                            <th>Quiz Taken</th>
+                            <th>Accuracy</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <button class="btn-outline" id="prevPageBtn">Previous</button>
+                <span id="pageInfo">Page 1 of 1</span>
+                <button class="btn-outline" id="nextPageBtn">Next</button>
+            </div>
+        </div>
+    </div>
+<script>
+    // API base URL - make sure this matches your Flask server
+    const API_BASE_URL = 'http://localhost:5000';
+    
+    // DOM elements
+    const usersTableBody = document.getElementById('usersTableBody');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const pageInfo = document.getElementById('pageInfo');
+    const totalUsersEl = document.getElementById('totalUsers');
+    const activeUsersEl = document.getElementById('activeUsers');
+    const sessionsGeneratedEl = document.getElementById('sessionGenerated');
+    const questionsGeneratedEl = document.getElementById('questionsGenerated');
+    const answersEvaluatedEl = document.getElementById('answersEvaluated');
+    
+    // Pagination variables
+    let currentPage = 1;
+    let totalPages = 1;
+    let searchQuery = '';
+    
+    // Load users when page loads
+    window.onload = function() {
+        loadUsers();
+        loadStats();
+    };
+    
+    // Event listeners
+    searchBtn.addEventListener('click', () => {
+        searchQuery = searchInput.value.trim();
+        currentPage = 1;
+        loadUsers();
+    });
+    
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadUsers();
+        }
+    });
+    
+    nextPageBtn.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadUsers();
+        }
+    });
+    
+    // Event listeners
+    searchInput.addEventListener('input', function() {
+        const clearBtn = document.getElementById('clearSearchBtn');
+        clearBtn.style.display = this.value ? 'block' : 'none';
+    });
+
+    document.getElementById('clearSearchBtn').addEventListener('click', function() {
+        searchInput.value = '';
+        this.style.display = 'none';
+        searchQuery = '';
+        currentPage = 1;
+        loadUsers();
+    });
+
+    searchBtn.addEventListener('click', () => {
+        searchQuery = searchInput.value.trim();
+        currentPage = 1;
+        loadUsers();
+    });
+
+    // Update the loadUsers function to handle search
+    async function loadUsers() {
+        try {
+            // Show loading state
+            usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Loading users...</td></tr>';
+        
+            // Call API with search parameters
+            const response = await fetch(`${API_BASE_URL}/api/admin/users?page=${currentPage}&search=${encodeURIComponent(searchQuery)}`);
+        
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        
+            const data = await response.json();
+        
+            // Check if the response contains an error
+            if (data.error) {
+                throw new Error(data.error);
+            }
+        
+            // Update pagination
+            currentPage = data.page;
+            totalPages = data.total_pages;
+            updatePaginationUI();
+        
+            // Clear table
+            usersTableBody.innerHTML = '';
+        
+            // Populate table with real data
+            if (data.users.length === 0) {
+                const noResultsMsg = searchQuery 
+                    ? `No users found matching "${searchQuery}"`
+                    : 'No users found';
+                usersTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">${noResultsMsg}</td></tr>`;
+                return;
+            }
+        
+            data.users.forEach(user => {
+                const row = document.createElement('tr');
+            
+                // Calculate accuracy
+                const accuracy = user.questions_attempted > 0 
+                    ? Math.round((user.correct_answers / user.questions_attempted) * 100)
+                    : 0;
+            
+                // Determine accuracy badge class
+                let accuracyBadgeClass = 'badge-primary';
+                if (accuracy >= 80) accuracyBadgeClass = 'badge-success';
+                else if (accuracy >= 50) accuracyBadgeClass = 'badge-warning';
+                else if (accuracy > 0) accuracyBadgeClass = 'badge-danger';
+            
+                row.innerHTML = `
+                    <td>${user.user_id}</td>
+                    <td>
+                        <span class="badge badge-primary">${user.learning_style || 'Unknown'}</span>
+                    </td>
+                    <td>${user.sessions_attempted || 0}</td>
+                    <td>
+                        <span class="badge ${accuracyBadgeClass}">${accuracy}%</span>
+                    </td>
+                    <td>
+                        <button class="btn-outline btn-sm" onclick="viewUserDetails('${user.user_id}')">View</button>
+                    </td>
+                `;
+            
+                usersTableBody.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error loading users:', error);
+            usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Error loading users. Please try again.</td></tr>';
+        }
+    }
+
+    async function loadStats() {
+        try {
+            // Call real API to get stats
+            const response = await fetch(`${API_BASE_URL}/api/admin/stats`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Check if the response contains an error
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Update UI with real data
+            totalUsersEl.textContent = data.total_users || 0;
+            sessionsGeneratedEl.textContent = data.total_sessions || 0;
+            questionsGeneratedEl.textContent = data.questions_generated || 0;
+            answersEvaluatedEl.textContent = data.answers_evaluated || 0;
+        } catch (error) {
+            console.error('Error loading stats:', error);
+            // You might want to show an error message to the admin
+        }
+    }
+    
+    function updatePaginationUI() {
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        
+        prevPageBtn.disabled = currentPage <= 1;
+        nextPageBtn.disabled = currentPage >= totalPages;
+    }
+    
+    function viewUserDetails(userId) {
+        // Navigate to user_details.html with the user_id parameter
+        window.location.href = `user_details.html?user_id=${userId}`;
+    }
+</script>
+</body>
+</html>
