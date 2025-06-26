@@ -488,8 +488,8 @@
                 
                 // Update basic stats
                 document.getElementById('userId').textContent = userId;
-                document.getElementById('sessionsCount').textContent = data.performance.total_sessions || 0;
-                document.getElementById('questionsAttempted').textContent = data.performance.correct_answers || 0;
+                document.getElementById('sessionsCount').textContent = data.sessions_count || 0;
+                document.getElementById('questionsAttempted').textContent = data.performance.total_attempts || 0;
                 document.getElementById('scoredRate').textContent = `${data.performance.overall_accuracy || 0}%`;
                 
                 
